@@ -41,6 +41,12 @@
       "name": "Fiddle Leaf Fig",
       "image": "./images/fiddle-leaf-fig.jpg",
       "price": 55
+    },
+    {
+      "name": "Vivian Yim",
+      "image": "https://cdn.shopify.com/s/files/1/0268/0029/1885/products/S24111PP1017_Full_1110x1136_947cfdd8-eb33-44ab-a384-bbc28a9ad446_1194x.jpg?v=1637599529",
+      "price": "1",
+      "id": 8
     }
   ]
 }
