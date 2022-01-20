@@ -3,7 +3,7 @@ import React, {useState} from "react";
 function NewPlantForm({handleSubmit}) {
   const [name, setName] = useState("")
   const [image, setImage]= useState("")
-  const[price, setPrice]= useState("")
+  const[price, setPrice]= useState(0)
 
   function onChangeName(e){
     setName(e.target.value)
@@ -45,7 +45,7 @@ function NewPlantForm({handleSubmit}) {
       <form onSubmit={onHandleSubmit}>
         <input onChange={onChangeName} type="text" name="name" placeholder="Plant name" value= {name}/>
         <input onChange={onChangeImage}type="text" name="image" placeholder="Image URL" value={image}/>
-        <input onChange={onChangePrice}type="number" name="price" step="0.01" placeholder="Price" value={price}/>
+        <input onChange={onChangePrice}type="number" name="price" step="1.0" placeholder="Price" value={price}/>
         <button type="submit">Add Plant</button>
       </form>
     </div>
