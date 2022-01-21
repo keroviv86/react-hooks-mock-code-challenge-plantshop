@@ -1,51 +1,46 @@
 import React, {useState} from "react";
 
 function NewPlantForm({handleSubmit}) {
-  const [name, setName] = useState("")
-  const [image, setImage]= useState("")
-  const[price, setPrice]= useState(0)
-
-  function onChangeName(e){
-    setName(e.target.value)
-  }
-
-  function onChangeImage(e){
-    setImage(e.target.value)
-  }
-
-  function onChangePrice(e){
-    setPrice(e.target.value)
+  const [formData, formDataSetter]= useState({
+    name: "",
+    image: "",
+    price: "",
+  })
+  function handleOnChange(e){
+    const name = e.target.name
+    const value= e.target.value
+    formDataSetter({
+      ...formData,
+      [name]:value
+    })
   }
 
   function onHandleSubmit(event){
     event.preventDefault()
-    const newObj={
-      name: name,
-      image:image,
-      price:price
+    const newPlantObj = {
+      name: formData.name,
+      image: formData.image,
+      price: formData.price
     }
-    fetch("http://localhost:6001/plants",{
+    fetch("http://localhost:6001/plants", {
       method: "POST",
       headers: {
         "Content-Type": "application/json"
       },
-      body:JSON.stringify(newObj)
+      body: JSON.stringify(newPlantObj)
     })
     .then(res=>res.json())
-    .then(handleSubmit(newObj))
-    setName("")
-    setImage("")
-    setPrice("")
+    .then(data=>handleSubmit(data))
+    // handleSubmit(newPlantObj)
   }
-
 
   return (
     <div className="new-plant-form">
       <h2>New Plant</h2>
-      <form onSubmit={onHandleSubmit}>
-        <input onChange={onChangeName} type="text" name="name" placeholder="Plant name" value= {name}/>
-        <input onChange={onChangeImage}type="text" name="image" placeholder="Image URL" value={image}/>
-        <input onChange={onChangePrice}type="number" name="price" step="1.0" placeholder="Price" value={price}/>
+      <form onSubmit= {onHandleSubmit}>
+        <input type="text" name="name" placeholder="Plant name" onChange= {handleOnChange} value= {formData.name}/>
+        <input type="text" name="image" placeholder="Image URL" onChange= {handleOnChange}value= {formData.image}/>
+        <input type="number" name="price" step="0.01" placeholder="Price" onChange= {handleOnChange} value= {formData.price}/>
         <button type="submit">Add Plant</button>
       </form>
     </div>
@@ -53,3 +48,4 @@ function NewPlantForm({handleSubmit}) {
 }
 
 export default NewPlantForm;
+

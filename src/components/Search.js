@@ -1,9 +1,8 @@
 import React from "react";
 
-function Search({handleFilter}) {
-
-  function onHandleFilter(e){
-    handleFilter(e.target.value)
+function Search({handleSearch}) {
+  function onHandleSearch(e){
+    handleSearch(e.target.value)
   }
 
 
@@ -14,10 +13,11 @@ function Search({handleFilter}) {
         type="text"
         id="search"
         placeholder="Type a name to search..."
-        onChange={onHandleFilter}
+        onChange={onHandleSearch}
       />
     </div>
   );
 }
 
 export default Search;
+

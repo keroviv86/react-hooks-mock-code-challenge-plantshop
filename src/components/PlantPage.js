@@ -1,64 +1,61 @@
-import React, {useEffect, useState} from "react";
+import React, {useState, useEffect} from "react";
 import NewPlantForm from "./NewPlantForm";
 import PlantList from "./PlantList";
 import Search from "./Search";
 
 function PlantPage() {
-  const[getPlants, setGetPlants]= useState([])
-  const[search, setSearch] = useState("")
+  const [getPlants, getPlantSetter] = useState([])
+  const [search, searchSetter]= useState("")
 
-
-  useEffect(()=> {
-    fetch(" http://localhost:6001/plants")
+  useEffect(()=>{
+    fetch("http://localhost:6001/plants")
     .then(res=>res.json())
-    .then(data=>setGetPlants(data))
+    .then(data=> getPlantSetter(data))
   }, [])
 
-  function handleSubmit(newPlant){
-    // setGetPlants([...getPlants, newPlant])
-    // the bottom is more stable
-    setGetPlants((oldPlants) =>[...oldPlants, newPlant])
+  function handleSearch(value){
+    searchSetter(value)
+  }
+
+  function filterSearch(){
+    const filteringItems = getPlants.filter((plant)=>(
+      plant.name.toLowerCase().includes(search.toLowerCase())
+    ))
+    return filteringItems
+  }
+
+  function handleSubmit(newPlantObj){
+    getPlantSetter((prevPlant)=>[...prevPlant,newPlantObj])
   }
 
   function handleDelete(id){
-    const deletedItem = getPlants.filter((plant)=> (
+    const itemToDelete = getPlants.filter((plant)=>(
       (plant.id !== id)
     ))
-    setGetPlants(deletedItem)
+    getPlantSetter(itemToDelete)
   }
 
-  function handleFilter(searchedValue){
-    setSearch(searchedValue)
-  }
-
-  function itemsToSearch(){
-    const filtering = getPlants.filter((plant)=>(
-      plant.name.toLowerCase().includes(search.toLowerCase())
-    ))
-    return filtering
-  }
-
-  function handlePrice(newPlantPrice){
-    const updatedPlantArray= getPlants.map((plantObj)=>{
-      if(plantObj.id === newPlantPrice.id){
-        console.log(newPlantPrice.id)
-        return {
+  function handlePrice(newPrice){
+    const updatePrice = getPlants.map((plantObj)=>{
+      if(plantObj.id === newPrice.id ){
+        return  {
           ...plantObj, 
-          price: parseInt(newPlantPrice.price)}
+          price: newPrice.price}
       }else{
         return plantObj
       }
     })
-    setGetPlants(updatedPlantArray)
+    getPlantSetter(updatePrice)
   }
 
   return (
     <main>
       <NewPlantForm handleSubmit={handleSubmit}/>
-      <Search search={search} setSearch={setSearch} handleFilter={handleFilter}/>
-      <PlantList getPlants={itemsToSearch()} handleDelete= {handleDelete} handlePrice= {handlePrice}/>
+      <Search handleSearch={handleSearch}/>
+      <PlantList getPlants= {filterSearch()} handleDelete={handleDelete} handlePrice= {handlePrice}/>
     </main>
   );
 }
 
 export default PlantPage;
+
